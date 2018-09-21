@@ -1,0 +1,6 @@
+all:hello.o
+	gcc -finstrument-functions hello.o -o hello
+hello.o:
+	gcc -finstrument-functions -c hello.c
+clean:
+	rm *.o hello -rf
