@@ -22,9 +22,9 @@ TestResult() {
 	for ip in $(seq 3 $number)
 	do
 		hexip=$(echo "obase=16;$ip" | bc)
-		sum=$(grep "$NETWORK$hexip: time" result.log | awk -F '[=]' '{ printf "%d ", $2}')
-		sumcount=$(grep -c "$NETWORK$hexip: time" result.log)
-		sumfail=$(grep -c -w $NETWORK$hexip:timeout result.log)
+		sum=$(grep -i "$NETWORK$hexip: time" result.log | awk -F '[=]' '{ printf "%d ", $2}')
+		sumcount=$(grep -ic "$NETWORK$hexip: time" result.log)
+		sumfail=$(grep -ic -w $NETWORK$hexip:timeout result.log)
 		#echo $sum
 		cal_sum=0
 		for i in ${sum[@]}
@@ -42,8 +42,8 @@ TestResult() {
 			echo -e "\E[0;31;40m all time out \e[0m"
 		fi	
 	done
-	EndTotal=$(grep -c $NETWORK result.log)
-	EndFail=$(grep -c :timeout result.log)
+	EndTotal=$(grep -ic $NETWORK result.log)
+	EndFail=$(grep -ic :timeout result.log)
 	echo exit
 	echo Fail:$EndFail
 	echo Total:$EndTotal
@@ -90,18 +90,18 @@ do
 			during=$((timeend - timestart))
 			#echo $during
 			echo "$DATE $PASSRESULT time=$during" >> result.log
-			TOTAL=$(grep -c -w $NETWORK$hexip result.log)
-			FAIL=$(grep -c -w $NETWORK$hexip:timeout result.log)
-			PASS=$(grep -c -w $NETWORK$hexip: result.log)
+			TOTAL=$(grep -ic -w $NETWORK$hexip result.log)
+			FAIL=$(grep -ic -w $NETWORK$hexip:timeout result.log)
+			PASS=$(grep -ic -w $NETWORK$hexip: result.log)
 			echo "$DATE $NETWORK$hexip time=$during ms($PASS:$FAIL:$TOTAL)"
 			#cat ping.log | tail -1 | awk -F '[/ ]' '{ print $2 $7 $8 ; }'
 		else
 			#printf "\E[0;31;47m"
 			DATE=$(date '+%Y%m%d%H%M%S.%N')
 			echo "$DATE $NETWORK$hexip:timeout" >> result.log
-			TOTAL=$(grep -c -w $NETWORK$hexip result.log)
-			PASS=$(grep -c -w $NETWORK$hexip:time= result.log)
-			FAIL=$(grep -c -w $NETWORK$hexip:timeout result.log)
+			TOTAL=$(grep -ic -w $NETWORK$hexip result.log)
+			PASS=$(grep -ic -w $NETWORK$hexip:time= result.log)
+			FAIL=$(grep -ic -w $NETWORK$hexip:timeout result.log)
 			echo -e "\E[0;31;40m$NETWORK$hexip:timeout \e[0m"
 			echo "$DATE $NETWORK$hexip ($PASS:$FAIL:$TOTAL)"
 		fi
